@@ -9,5 +9,13 @@
   },
   "engines": {
     "node": "*"
+  },
+  "dependencies": {
+      "pg":""
+      ,"caching-service":""
+  },
+  "devDependencies": {},
+  "repository": {
+    "url": ""
   }
 }
