@@ -13,6 +13,7 @@
   "dependencies": {
       "pg":""
       ,"caching-service":""
+      ,"underscore" : ""
   },
   "devDependencies": {},
   "repository": {
