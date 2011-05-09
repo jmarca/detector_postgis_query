@@ -7,7 +7,12 @@
   "directories": {
     "lib": "./lib"
   },
-  "engines": {
-    "node": "*"
-  }
+    "dependencies" :    {
+        "pg" : ""
+        ,"caching_service" : ""
+        ,"underscore" : ""
+    },
+    "engines": {
+        "node": "*"
+    }
 }
