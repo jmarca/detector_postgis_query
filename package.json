@@ -12,7 +12,7 @@
   },
   "dependencies": {
       "pg":""
-      ,"caching-service":""
+      ,"caching_service":""
       ,"underscore" : ""
   },
   "devDependencies": {},
