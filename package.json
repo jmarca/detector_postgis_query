@@ -8,12 +8,13 @@
     "lib": "./lib"
   },
   "engines": {
-    "node": "*"
+    "node": "~0.4.8"
   },
   "dependencies": {
       "pg":""
       ,"caching_service":""
       ,"underscore" : ""
+      ,"couchdb":"1.0.3"
   },
   "devDependencies": {},
   "repository": {
