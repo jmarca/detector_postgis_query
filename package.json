@@ -20,5 +20,6 @@
   "devDependencies": {},
   "repository": {
     "url": ""
-  }
+  },
+    "main": "lib/geo_bbox.js"
 }
