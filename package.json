@@ -13,6 +13,7 @@
   "dependencies": {
       "pg":""
       ,"caching_service":""
+      ,"makedir":"0.0.2"
       ,"underscore" : ""
       ,"couchdb":"1.0.3"
   },
