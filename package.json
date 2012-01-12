@@ -8,7 +8,7 @@
     "lib": "./lib"
   },
   "engines": {
-    "node": "~0.4.8"
+    "node": ">0.4.8"
   },
   "dependencies": {
     "pg": "",
