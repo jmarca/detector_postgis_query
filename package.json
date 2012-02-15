@@ -16,6 +16,7 @@
     "makedir": ">0.0.4",
     "underscore": "",
     "request": "",
+    "async": "",
     "couchdb": "1.0.3"
   },
   "devDependencies": {},
