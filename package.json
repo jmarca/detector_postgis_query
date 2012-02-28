@@ -13,8 +13,10 @@
   "dependencies": {
     "pg": "",
     "caching_service": "",
-    "makedir": "~0.0.4",
+    "makedir": ">0.0.4",
     "underscore": "",
+    "request": "",
+    "async": "",
     "couchdb": "1.0.3"
   },
   "devDependencies": {},
