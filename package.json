@@ -11,11 +11,11 @@
     "node": ">0.4.8"
   },
   "dependencies": {
-    "pg": "",
+    "pg": "https://github.com/brianc/node-postgres/tarball/master",
     "caching_service": "",
     "makedir": ">0.0.4",
     "underscore": "",
-    "request": "",
+    "request": "https://github.com/mikeal/request/tarball/master",
     "async": "",
     "couchdb": "1.0.3"
   },
