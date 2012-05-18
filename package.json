@@ -8,16 +8,17 @@
     "lib": "./lib"
   },
   "engines": {
-    "node": ">0.4.8"
+    "node": ">0.6"
   },
   "dependencies": {
-    "pg": "https://github.com/brianc/node-postgres/tarball/master",
+      "pg": "",
     "caching_service": "",
-    "makedir": ">0.0.4",
+    "makedir": "",
     "underscore": "",
-    "request": "https://github.com/mikeal/request/tarball/master",
+      "request": "",
     "async": "",
-    "couchdb": "1.0.3"
+      "couchdb": "1.0.3",
+      "date-functions":""
   },
   "devDependencies": {
       "nodeunit":""
