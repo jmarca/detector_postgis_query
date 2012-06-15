@@ -1,7 +1,7 @@
 {
   "name": "geo_bbox",
   "description": "Use geos wrapper to snip geojson geometries to a passed bounding box.  and other stuff too",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "http://www.github.com/jmarca",
   "author": "James E. Marca <jmarca@translab.its.uci.edu> (http://www.activimetrics.com)",
   "directories": {
@@ -11,17 +11,17 @@
     "node": ">0.6"
   },
   "dependencies": {
-      "pg": "",
+    "pg": "",
     "caching_service": "",
     "makedir": "",
     "underscore": "",
-      "request": "",
+    "request": "",
     "async": "",
-      "couchdb": "1.0.3",
-      "date-functions":""
+    "couchdb": "1.0.3",
+    "date-functions": ""
   },
   "devDependencies": {
-      "nodeunit":""
+    "nodeunit": ""
   },
   "repository": {
     "url": ""
