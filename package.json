@@ -26,7 +26,7 @@
         "type": "git",
         "url": "https://github.com/jmarca/geo_bbox.git"
     },
-    "main": "lib/geo_bbox.js",
+    "main": "index.js",
     "optionalDependencies": {},
     "license": "MIT"
 }

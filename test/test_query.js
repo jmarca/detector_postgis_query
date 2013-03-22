@@ -3,10 +3,10 @@
 var should = require('should')
 
 var env = process.env;
-var puser = process.env.PSQL_USER ;
-var ppass = process.env.PSQL_PASS ;
-var phost = process.env.PSQL_HOST ;
-var pport = process.env.PSQL_PORT || 5432;
+var puser = env.PSQL_USER ;
+var ppass = env.PSQL_PASS ;
+var phost = env.PSQL_HOST ;
+var pport = env.PSQL_PORT || 5432;
 
 var express = require('express')
 var http = require('http')
