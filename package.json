@@ -1,31 +1,32 @@
 {
-  "name": "geo_bbox",
-  "description": "Use geos wrapper to snip geojson geometries to a passed bounding box.  and other stuff too",
-  "version": "0.1.1",
-  "homepage": "http://www.github.com/jmarca",
-  "author": "James E. Marca <jmarca@translab.its.uci.edu> (http://www.activimetrics.com)",
-  "directories": {
-    "lib": "./lib"
-  },
-  "engines": {
-    "node": ">0.6"
-  },
-  "dependencies": {
-    "pg": "",
-    "caching_service": "",
-    "makedir": "",
-    "underscore": "",
-    "request": "",
-    "async": "",
-    "couchdb": "1.0.3",
-    "date-functions": ""
-  },
-  "devDependencies": {
-    "nodeunit": ""
-  },
-  "repository": {
-    "url": ""
-  },
-  "main": "lib/geo_bbox.js",
-  "optionalDependencies": {}
+    "name": "detector_postgis_query",
+    "description": "Use geos wrapper to snip geojson geometries to a passed bounding box.  and other stuff too",
+    "version": "0.2.0",
+    "homepage": "http://www.github.com/jmarca/detector_postgis_query",
+    "author": "James E. Marca <jmarca@translab.its.uci.edu> (http://www.activimetrics.com)",
+    "directories": {
+        "lib": "./lib"
+    },
+    "engines": {
+        "node": ">0.8"
+    },
+    "dependencies": {
+        "pg": "",
+        "lodash": "",
+        "geom_utils": "git://github.com/jmarca/geom_utils.git",
+        "async": "",
+        "date-functions": "git://github.com/jmarca/date-functions.git"
+    },
+    "devDependencies": {
+        "express":"",
+        "should":"",
+        "superagent":""
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jmarca/geo_bbox.git"
+    },
+    "main": "lib/geo_bbox.js",
+    "optionalDependencies": {},
+    "license": "MIT"
 }
