@@ -25,7 +25,9 @@ describe('geoQuery',function(){
         function handler(req,res,next){
 
             var doGeo = geoQuery(req,function(err,features){
-                            if(err) return next(err)
+                            if(err){
+                                return next(err)
+                            }
                             res.json(features)
                             return res.end()
                         })
