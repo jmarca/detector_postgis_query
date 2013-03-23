@@ -1,1 +1,1 @@
-exports.geoQuery=require('./lib/geoQuery')
+exports.geoQuery=require('./lib/geoQuery').geoQuery
