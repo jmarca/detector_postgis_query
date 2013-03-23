@@ -15,7 +15,7 @@ var testhost = env.TEST_HOST || '127.0.0.1'
 var _ = require('lodash')
 
 var superagent = require('superagent')
-var geoQuery = require('../lib/geoQuery').geoQuery
+var geoQuery = require('../.').geoQuery
 var pg = require('pg')
 
 describe('geoQuery',function(){
