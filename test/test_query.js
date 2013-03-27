@@ -49,6 +49,21 @@ describe('geoQuery',function(){
             var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
             pg.connect(osmConnectionString, doGeo);
         }
+        function handler3(req,res,next){
+
+            var doGeo = geoQuery(req
+                                ,{'area_type_param':'gumby'
+                                 ,'area_param':'dammit'}
+                                ,function(err,features){
+                            if(err){
+                                return next(err)
+                            }
+                            res.json(features)
+                            return res.end()
+                        })
+            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
+            pg.connect(osmConnectionString, doGeo);
+        }
         app = express()
         app.get('/zcr/:year/:zoom/:column/:row.:format'
                ,handler)
@@ -56,6 +71,8 @@ describe('geoQuery',function(){
                ,handler2)
         app.get('/:area/:aggregate/:year/:areaid.:format'
                ,handler2)
+        app.get('/h3/:gumby/:aggregate/:year/:dammit.:format'
+               ,handler3)
         server=http
                .createServer(app)
                .listen(testport,testhost,done)
@@ -67,6 +84,36 @@ describe('geoQuery',function(){
     it('should get vds data in an area'
       ,function(done){
            superagent.get('http://'+ testhost +':'+testport+'/counties/monthly/2007/06059.json')
+           .set({'accept':'application/json'
+                ,'followRedirect':true})
+           .end(function(e,r){
+               if(e) return done(e)
+               r.should.have.status(200)
+               var c = r.body
+               c.should.have.property('length')
+               c.length.should.be.above(1000)
+               var vds_re = /vdsid/;
+               var wim_re = /wim/;
+               var has_vds = _.some(c
+                                   ,function(feature){
+                                        return vds_re.test(feature.properties.detector_id)
+                                    })
+               has_vds.should.be.true
+               var has_wim = _.some(c
+                                   ,function(feature){
+                                        return wim_re.test(feature.properties.detector_id)
+                                    })
+               has_wim.should.be.true
+
+
+               return done()
+           })
+
+       })
+
+    it('should get vds data in an area'
+      ,function(done){
+           superagent.get('http://'+ testhost +':'+testport+'/h3/counties/monthly/2007/06059.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
