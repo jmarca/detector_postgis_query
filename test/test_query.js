@@ -24,7 +24,22 @@ describe('geoQuery',function(){
         // set up a small express server so I don't have to mock up request objects
         function handler(req,res,next){
 
-            var doGeo = geoQuery(req,function(err,features){
+            var doGeo = geoQuery(req,{},function(err,features){
+                            if(err){
+                                return next(err)
+                            }
+                            res.json(features)
+                            return res.end()
+                        })
+            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
+            pg.connect(osmConnectionString, doGeo);
+        }
+        function handler2(req,res,next){
+
+            var doGeo = geoQuery(req
+                                ,{'area_type_param':'area'
+                                 ,'area_param':'areaid'}
+                                ,function(err,features){
                             if(err){
                                 return next(err)
                             }
@@ -37,8 +52,10 @@ describe('geoQuery',function(){
         app = express()
         app.get('/zcr/:year/:zoom/:column/:row.:format'
                ,handler)
+        app.get('/zcr2/:year/:zoom/:column/:row.:format'
+               ,handler2)
         app.get('/:area/:aggregate/:year/:areaid.:format'
-               ,handler)
+               ,handler2)
         server=http
                .createServer(app)
                .listen(testport,testhost,done)
@@ -49,8 +66,6 @@ describe('geoQuery',function(){
 
     it('should get vds data in an area'
       ,function(done){
-
-
            superagent.get('http://'+ testhost +':'+testport+'/counties/monthly/2007/06059.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
@@ -83,6 +98,21 @@ describe('geoQuery',function(){
       ,function(done){
            // load the service for vds shape data
            superagent.get('http://'+ testhost +':'+testport+'/zcr/2007/14/2821/6558.json')
+           .set({'accept':'application/json'
+                ,'followRedirect':true})
+           .end(function(e,r){
+               if(e) return done(e)
+               r.should.have.status(200)
+               var c = r.body
+               c.should.have.property('length',11)
+
+               return done()
+           })
+       })
+    it('should spit out vds links in a bbox defined by zoom, column, row, with area handler too'
+      ,function(done){
+           // load the service for vds shape data
+           superagent.get('http://'+ testhost +':'+testport+'/zcr2/2007/14/2821/6558.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
