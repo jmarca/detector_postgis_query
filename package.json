@@ -1,32 +1,39 @@
 {
-    "name": "detector_postgis_query",
-    "description": "Use geos wrapper to snip geojson geometries to a passed bounding box.  and other stuff too",
-    "version": "0.2.0",
-    "homepage": "http://www.github.com/jmarca/detector_postgis_query",
-    "author": "James E. Marca <jmarca@translab.its.uci.edu> (http://www.activimetrics.com)",
-    "directories": {
-        "lib": "./lib"
-    },
-    "engines": {
-        "node": ">0.8"
-    },
-    "dependencies": {
-        "pg": "",
-        "lodash": "",
-        "geom_utils": "git://github.com/jmarca/geom_utils.git",
-        "async": "",
-        "date-functions": "git://github.com/jmarca/date-functions.git"
-    },
-    "devDependencies": {
-        "express":"",
-        "should":"",
-        "superagent":""
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jmarca/geo_bbox.git"
-    },
-    "main": "index.js",
-    "optionalDependencies": {},
-    "license": "MIT"
+  "name": "detector_postgis_query",
+  "description": "Use geos wrapper to snip geojson geometries to a passed bounding box.  and other stuff too",
+  "version": "0.2.0",
+  "homepage": "http://www.github.com/jmarca/detector_postgis_query",
+  "author": "James E. Marca <jmarca@translab.its.uci.edu> (http://www.activimetrics.com)",
+  "directories": {
+    "test": "test"
+  },
+  "engines": {
+    "node": ">0.8"
+  },
+  "dependencies": {
+    "pg": "",
+    "lodash": "",
+    "geom_utils": "git://github.com/jmarca/geom_utils.git",
+    "async": "",
+    "date-functions": "git://github.com/jmarca/date-functions.git"
+  },
+  "devDependencies": {
+    "express": "",
+    "mocha": "^2.5.3",
+    "should": "",
+    "superagent": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmarca/geo_bbox.git"
+  },
+  "main": "index.js",
+  "optionalDependencies": {},
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/jmarca/geo_bbox/issues"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
 }
