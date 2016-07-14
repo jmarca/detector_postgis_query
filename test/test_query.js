@@ -18,12 +18,34 @@ var superagent = require('superagent')
 var geoQuery = require('../.').geoQuery
 var pg = require('pg')
 
+var config_okay = require('config_okay')
+var path = require('path')
+var rootdir = path.normalize(process.cwd())
+var config_file = rootdir+'/test.config.json'
+
+var config
+
+before(function(done){
+    config_okay(config_file,function(err,c){
+        config ={'postgresql':c.postgresql
+                ,'couchdb':c.couchdb}
+
+        return done()
+    })
+    return null
+})
+
 describe('geoQuery',function(){
     var app,server;
     before(function(done){
+        var host = config.postgresql.host ? config.postgresql.host : '127.0.0.1';
+        var user = config.postgresql.auth.username ? config.postgresql.auth.username : 'myname';
+        var pass = config.postgresql.auth.password ? config.postgresql.auth.password : '';
+        var port = config.postgresql.port ? config.postgresql.port :  5432;
+        var db  = config.postgresql.detector_postgis_query_db ? config.postgresql.detector_postgis_query_db : 'detector_postgis_query_db'
+        var connectionString = "pg://"+user+":"+pass+"@"+host+":"+port+"/"+db
         // set up a small express server so I don't have to mock up request objects
         function handler(req,res,next){
-
             var doGeo = geoQuery(req,{},function(err,features){
                             if(err){
                                 return next(err)
@@ -31,8 +53,14 @@ describe('geoQuery',function(){
                             res.json(features)
                             return res.end()
                         })
-            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
-            pg.connect(osmConnectionString, doGeo);
+            pg.connect(connectionString, function(e,client,done){
+                if(e){
+                    throw new Error(e)
+
+                }
+                return doGeo(e,client,done);
+
+            })
         }
         function handler2(req,res,next){
 
@@ -45,9 +73,16 @@ describe('geoQuery',function(){
                             }
                             res.json(features)
                             return res.end()
-                        })
-            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
-            pg.connect(osmConnectionString, doGeo);
+                                })
+            pg.connect(connectionString, function(e,client,done){
+                if(e){
+                    throw new Error(e)
+
+                }
+                return doGeo(e,client,done);
+
+            })
+
         }
         function handler3(req,res,next){
 
@@ -61,8 +96,15 @@ describe('geoQuery',function(){
                             res.json(features)
                             return res.end()
                         })
-            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
-            pg.connect(osmConnectionString, doGeo);
+            pg.connect(connectionString, function(e,client,done){
+                if(e){
+                    throw new Error(e)
+
+                }
+                return doGeo(e,client,done);
+
+            })
+
         }
         app = express()
         app.get('/zcr/:year/:zoom/:column/:row.:format'

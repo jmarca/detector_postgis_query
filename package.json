@@ -11,13 +11,16 @@
     "node": ">0.8"
   },
   "dependencies": {
-    "pg": "",
-    "lodash": "",
-    "geom_utils": "git://github.com/jmarca/geom_utils.git",
     "async": "",
-    "date-functions": "git://github.com/jmarca/date-functions.git"
+    "calvad_areas_sql": "github:jmarca/calvad_areas_sql",
+    "date-functions": "git://github.com/jmarca/date-functions.git",
+    "fips_codes": "github:jmarca/fips_codes",
+    "geom_utils": "github:jmarca/geom_utils",
+    "lodash": "",
+    "pg": ""
   },
   "devDependencies": {
+    "config_okay": "0.0.3",
     "express": "",
     "mocha": "^2.5.3",
     "should": "",
