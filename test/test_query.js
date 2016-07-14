@@ -1,6 +1,7 @@
 /* global require console process it describe after before */
 
 var should = require('should')
+require('should-http');
 
 var env = process.env;
 var puser = env.PSQL_USER ;
@@ -18,12 +19,34 @@ var superagent = require('superagent')
 var geoQuery = require('../.').geoQuery
 var pg = require('pg')
 
-describe('geoQuery',function(){
+var config_okay = require('config_okay')
+var path = require('path')
+var rootdir = path.normalize(process.cwd())
+var config_file = rootdir+'/test.config.json'
+
+var config
+
+before(function(done){
+    config_okay(config_file,function(err,c){
+        config ={'postgresql':c.postgresql
+                ,'couchdb':c.couchdb}
+
+        return done()
+    })
+    return null
+})
+
+describe('geoQuery tests',function(){
     var app,server;
     before(function(done){
+        var host = config.postgresql.host ? config.postgresql.host : '127.0.0.1';
+        var user = config.postgresql.auth.username ? config.postgresql.auth.username : 'myname';
+        var pass = config.postgresql.auth.password ? config.postgresql.auth.password : '';
+        var port = config.postgresql.port ? config.postgresql.port :  5432;
+        var db  = config.postgresql.detector_postgis_query_db ? config.postgresql.detector_postgis_query_db : 'detector_postgis_query_db'
+        var connectionString = "pg://"+user+":"+pass+"@"+host+":"+port+"/"+db
         // set up a small express server so I don't have to mock up request objects
         function handler(req,res,next){
-
             var doGeo = geoQuery(req,{},function(err,features){
                             if(err){
                                 return next(err)
@@ -31,23 +54,38 @@ describe('geoQuery',function(){
                             res.json(features)
                             return res.end()
                         })
-            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
-            pg.connect(osmConnectionString, doGeo);
+            pg.connect(connectionString, function(e,client,done){
+                if(e){
+                    throw new Error(e)
+
+                }
+                return doGeo(e,client,done);
+
+            })
         }
         function handler2(req,res,next){
 
             var doGeo = geoQuery(req
-                                ,{'area_type_param':'area'
-                                 ,'area_param':'areaid'}
-                                ,function(err,features){
-                            if(err){
-                                return next(err)
-                            }
-                            res.json(features)
-                            return res.end()
-                        })
-            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
-            pg.connect(osmConnectionString, doGeo);
+                                 ,{'area_type_param':'area'
+                                   ,'area_param':'areaid'}
+                                 ,function(err,features){
+
+                                     if(err){
+                                         console.log('got error',err)
+                                         return next(err)
+                                     }
+                                     //console.log('got feature',features)
+                                     res.json(features)
+                                     return res.end()
+                                 })
+            pg.connect(connectionString, function(e,client,done){
+                if(e){
+                    throw new Error(e)
+                }
+                return doGeo(e,client,done);
+
+            })
+
         }
         function handler3(req,res,next){
 
@@ -61,8 +99,15 @@ describe('geoQuery',function(){
                             res.json(features)
                             return res.end()
                         })
-            var osmConnectionString = "pg://"+puser+":"+ppass+"@"+phost+":"+pport+"/osm";
-            pg.connect(osmConnectionString, doGeo);
+            pg.connect(connectionString, function(e,client,done){
+                if(e){
+                    throw new Error(e)
+
+                }
+                return doGeo(e,client,done);
+
+            })
+
         }
         app = express()
         app.get('/zcr/:year/:zoom/:column/:row.:format'
@@ -83,13 +128,14 @@ describe('geoQuery',function(){
 
     it('should get vds data in an area'
       ,function(done){
-           superagent.get('http://'+ testhost +':'+testport+'/counties/monthly/2007/06059.json')
+           superagent.get('http://'+ testhost +':'+testport+'/counties/monthly/2012/06059.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
-           .end(function(e,r){
+           .end(function(e,res){
                if(e) return done(e)
-               r.should.have.status(200)
-               var c = r.body
+               // console.log(res)
+               res.should.have.status(200)
+               var c = res.body
                c.should.have.property('length')
                c.length.should.be.above(1000)
                var vds_re = /vdsid/;
@@ -113,7 +159,7 @@ describe('geoQuery',function(){
 
     it('should get vds data in an area'
       ,function(done){
-           superagent.get('http://'+ testhost +':'+testport+'/h3/counties/monthly/2007/06059.json')
+           superagent.get('http://'+ testhost +':'+testport+'/h3/counties/monthly/2012/06059.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
@@ -144,14 +190,14 @@ describe('geoQuery',function(){
     it('should spit out vds links in a bbox defined by zoom, column, row'
       ,function(done){
            // load the service for vds shape data
-           superagent.get('http://'+ testhost +':'+testport+'/zcr/2007/14/2821/6558.json')
+           superagent.get('http://'+ testhost +':'+testport+'/zcr/2012/14/2821/6558.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
                if(e) return done(e)
                r.should.have.status(200)
                var c = r.body
-               c.should.have.property('length',11)
+               c.should.have.property('length',116)
 
                return done()
            })
@@ -159,14 +205,14 @@ describe('geoQuery',function(){
     it('should spit out vds links in a bbox defined by zoom, column, row, with area handler too'
       ,function(done){
            // load the service for vds shape data
-           superagent.get('http://'+ testhost +':'+testport+'/zcr2/2007/14/2821/6558.json')
+           superagent.get('http://'+ testhost +':'+testport+'/zcr2/2012/14/2821/6558.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
                if(e) return done(e)
                r.should.have.status(200)
                var c = r.body
-               c.should.have.property('length',11)
+               c.should.have.property('length',116)
 
                return done()
            })
