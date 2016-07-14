@@ -1,7 +1,7 @@
 {
   "name": "detector_postgis_query",
   "description": "Use geos wrapper to snip geojson geometries to a passed bounding box.  and other stuff too",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "http://www.github.com/jmarca/detector_postgis_query",
   "author": "James E. Marca <jmarca@translab.its.uci.edu> (http://www.activimetrics.com)",
   "directories": {
