@@ -23,7 +23,8 @@
     "config_okay": "0.0.3",
     "express": "",
     "mocha": "^2.5.3",
-    "should": "",
+    "should": "^9.0.2",
+    "should-http": "0.0.4",
     "superagent": ""
   },
   "repository": {

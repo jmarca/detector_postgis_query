@@ -1,6 +1,7 @@
 /* global require console process it describe after before */
 
 var should = require('should')
+require('should-http');
 
 var env = process.env;
 var puser = env.PSQL_USER ;
@@ -35,7 +36,7 @@ before(function(done){
     return null
 })
 
-describe('geoQuery',function(){
+describe('geoQuery tests',function(){
     var app,server;
     before(function(done){
         var host = config.postgresql.host ? config.postgresql.host : '127.0.0.1';
@@ -65,19 +66,21 @@ describe('geoQuery',function(){
         function handler2(req,res,next){
 
             var doGeo = geoQuery(req
-                                ,{'area_type_param':'area'
-                                 ,'area_param':'areaid'}
-                                ,function(err,features){
-                            if(err){
-                                return next(err)
-                            }
-                            res.json(features)
-                            return res.end()
-                                })
+                                 ,{'area_type_param':'area'
+                                   ,'area_param':'areaid'}
+                                 ,function(err,features){
+
+                                     if(err){
+                                         console.log('got error',err)
+                                         return next(err)
+                                     }
+                                     //console.log('got feature',features)
+                                     res.json(features)
+                                     return res.end()
+                                 })
             pg.connect(connectionString, function(e,client,done){
                 if(e){
                     throw new Error(e)
-
                 }
                 return doGeo(e,client,done);
 
@@ -125,13 +128,14 @@ describe('geoQuery',function(){
 
     it('should get vds data in an area'
       ,function(done){
-           superagent.get('http://'+ testhost +':'+testport+'/counties/monthly/2007/06059.json')
+           superagent.get('http://'+ testhost +':'+testport+'/counties/monthly/2012/06059.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
-           .end(function(e,r){
+           .end(function(e,res){
                if(e) return done(e)
-               r.should.have.status(200)
-               var c = r.body
+               // console.log(res)
+               res.should.have.status(200)
+               var c = res.body
                c.should.have.property('length')
                c.length.should.be.above(1000)
                var vds_re = /vdsid/;
@@ -155,7 +159,7 @@ describe('geoQuery',function(){
 
     it('should get vds data in an area'
       ,function(done){
-           superagent.get('http://'+ testhost +':'+testport+'/h3/counties/monthly/2007/06059.json')
+           superagent.get('http://'+ testhost +':'+testport+'/h3/counties/monthly/2012/06059.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
@@ -186,14 +190,14 @@ describe('geoQuery',function(){
     it('should spit out vds links in a bbox defined by zoom, column, row'
       ,function(done){
            // load the service for vds shape data
-           superagent.get('http://'+ testhost +':'+testport+'/zcr/2007/14/2821/6558.json')
+           superagent.get('http://'+ testhost +':'+testport+'/zcr/2012/14/2821/6558.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
                if(e) return done(e)
                r.should.have.status(200)
                var c = r.body
-               c.should.have.property('length',11)
+               c.should.have.property('length',116)
 
                return done()
            })
@@ -201,14 +205,14 @@ describe('geoQuery',function(){
     it('should spit out vds links in a bbox defined by zoom, column, row, with area handler too'
       ,function(done){
            // load the service for vds shape data
-           superagent.get('http://'+ testhost +':'+testport+'/zcr2/2007/14/2821/6558.json')
+           superagent.get('http://'+ testhost +':'+testport+'/zcr2/2012/14/2821/6558.json')
            .set({'accept':'application/json'
                 ,'followRedirect':true})
            .end(function(e,r){
                if(e) return done(e)
                r.should.have.status(200)
                var c = r.body
-               c.should.have.property('length',11)
+               c.should.have.property('length',116)
 
                return done()
            })
